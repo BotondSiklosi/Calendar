@@ -1,5 +1,5 @@
-
 import sys
+
 import ui
 #  printing data, asking user for input
 import storage
@@ -8,8 +8,10 @@ import storage
 
 def schedule_new_meeting(table):
     labels_title = ["Enter meeting title", "Enter duration in hours (1 or 2)", "Enter start time"]
-    inputs = ui.get_input(labels_title, 'Your choise: s')
-
+    items_to_add = ui.get_input(labels_title, 'Your choise: s')
+    table.append(items_to_add)
+    storage.write_file_from_table("meetings.txt", table)
+    return table
 
 
 def cancel_existing_meeting(table):
@@ -22,25 +24,26 @@ def handle_menu():
 
 
 def main_menu():
-    while True:
-        table = storage.get_table_from_file(".txt")
-        inputs = ui.get_input(["Please chose an option"], "")
-        options = inputs[0]
-        if options == "s":
-            schedule_new_meeting(table)
+    table = storage.get_table_from_file("meetings.txt")
+    ui.print_table("Your schedule for the day", table)
+    handle_menu()
+    inputs = ui.get_input(["Please chose an option"], "")
+    options = inputs[0]
+    if options == "s":
+        schedule_new_meeting(table)
 
-        if options == "c":
-            cancel_existing_meeting(table)
+    if options == "c":
+        cancel_existing_meeting(table)
 
-        if options == "q":
-            sys.exit(0)
+    if options == "q":
+        sys.exit(0)
 
-        else:
-            raise KeyError("There is no such option.")
+    else:
+        raise KeyError("There is no such option.")
+
 
 def main():
     while True:
-        handle_menu()
         try:
             main_menu()
         except KeyError as err:
