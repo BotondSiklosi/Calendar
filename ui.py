@@ -22,10 +22,17 @@ def get_input(list_labels, title):
 
 
 def print_error_message(message):
-    print(message)
+    print("ERROR: " + message)
 
 
 def print_table(title, table):
+    l_table = len(table)
+    for i in range(0, l_table):
+        for j in range(0, l_table-i-1):
+            if (table[j][1] > table[j + 1][1]):
+                tempo = table[j]
+                table[j] = table[j + 1]
+                table[j + 1] = tempo
     print(title, ":")
     if os.stat("meetings.txt").st_size == 0:
         print("(empty)")
@@ -34,3 +41,4 @@ def print_table(title, table):
         for i in table:
             print(i[STARTING_TIME] + " - " + str(int(i[STARTING_TIME]) + int(i[HOW_LONG])) + " " + i[MEETING_TITLE])
         print()
+    return table
